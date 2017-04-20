@@ -4,15 +4,15 @@
 from flask_restful import reqparse, Resource
 from json_object import JsonObject
 
-auth=reqparse.RequestParser()
+register=reqparse.RequestParser()
 
-class Authentication(Resource):
+class Register(Resource):
 	def get(self):
 		pass
 	def post(self):
-		auth.add_argument('username',required=True,help="Username is Required")
-		auth.add_argument('password',required=True,help="Password is Required")
-		args=auth.parse_args()
+		register.add_argument('username',required=True,help="Username is Required")
+		register.add_argument('password',required=True,help="Password is Required")
+		args=register.parse_args()
 		username = args['username']
 		password = args['password']
 		jsobj = JsonObject()

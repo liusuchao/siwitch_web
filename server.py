@@ -2,6 +2,7 @@
 from flask import Flask
 from flask_restful import Api
 from auth_api import *
+from register_api import *
 
 app = Flask(__name__)
 api = Api(app)
@@ -11,6 +12,7 @@ def hello_world():
 	return 'Hello,World'
 
 api.add_resource(Authentication,'/auth')
+api.add_resource(Register,'/register')
 
 if __name__ == '__main__':
-	app.run("192.168.1.119")
+	app.run("192.168.9.119")
