@@ -2,6 +2,8 @@
 # -*- coding:utf-8 -*-
 # Author: Leon xie
 import user
+import tools
+
 from flask_script import Manager
 from server import app
 
@@ -28,11 +30,17 @@ def drop():
 	
 @manager.command
 def add():
-	user.add_db("liusuchao","123","liusuchao@126.com")
-	
+	ret = user.add_db("liusuchao","123","liusuchao@126.com")
+	print('*'*10)
+	print(ret)
+	print('-'*10)
+
 @manager.command
 def query():
-	user.query_db()
+	ret = user.query_db("liusuchao")
+	print('*'*10)
+	print(tools.row2dict(ret))
+	print('-'*10)
 	
 if __name__ == '__main__':
     manager.run()

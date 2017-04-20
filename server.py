@@ -15,4 +15,4 @@ api.add_resource(Authentication,'/auth')
 api.add_resource(Register,'/register')
 
 if __name__ == '__main__':
-	app.run("192.168.9.119")
+	app.run("192.168.1.119")
