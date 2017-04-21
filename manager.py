@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 # Author: Leon xie
-import user
+import sms
 import tools
 
 from flask_script import Manager
@@ -21,25 +21,25 @@ def hello_world(msg_val):
 
 @manager.command
 def init():
-	user.init_db()
+	sms.init_db()
 
 @manager.command
 def drop():
-	user.drop_db()
+	sms.drop_db()
 
 	
 @manager.command
 def add():
-	ret = user.add_db("liusuchao","123","liusuchao@126.com")
+	ret = sms.add_db("liusuchao","123")
 	print('*'*10)
 	print(ret)
 	print('-'*10)
 
 @manager.command
 def query():
-	ret = user.query_db("liusuchao")
+	ret = sms.query_db("liusuchao",'123')
 	print('*'*10)
-	print(tools.row2dict(ret))
+	print(ret)
 	print('-'*10)
 	
 if __name__ == '__main__':
