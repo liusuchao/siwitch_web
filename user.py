@@ -36,11 +36,11 @@ class User(base):
 		
 
 def init_db():
-    base.metadata.create_all(engine)
+	base.metadata.create_all(engine)
 
 def drop_db():
-    base.metadata.drop_all(engine)
-	
+	base.metadata.drop_all(engine)
+
 def add_db(user,password,email=''):
 	session_class = sessionmaker(bind=engine)
 	session = session_class()
@@ -50,7 +50,6 @@ def add_db(user,password,email=''):
 	info.email = email
 	k=info.generate_token()
 
-	time.sleep(10)
 	hh =info.verify_token(k)
 	print("**************")
 	print(hh)
@@ -74,6 +73,8 @@ def query_db(user):
 	session = session_class()
 	try:
 		my_user = session.query(User).filter_by(user=user).first()  # ≤È—Ø
+		if my_user == None:
+			my_user = False
 		return my_user
 	except:
 		return False

@@ -6,8 +6,6 @@ import random
 import string
 import hashlib
 
-
-
 APP_KYE = "3642d404c0cf06d8d0a1f07e2cc2a22d"
 APP_SECRET = "76818144472e"
 HEADERS = {"AppKey": " ", "CheckSum": " ","CurTime": " ", "Nonce": " ","Content-Type": ""}
