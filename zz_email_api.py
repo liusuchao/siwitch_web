@@ -1,10 +1,11 @@
 #coding:utf-8
+from zz_include import error_code
 from flask_restful import reqparse, Resource
 from json_object import JsonObject
-from zz_email_database import query_db,add_db
+from zz_verify_database import query_db_if_exist ,query_db_if_valid,add_db
+from zz_user_database import query_db_if_user
 from zz_verification_code import generate_verification_code
 from zz_email import send_verify
-
 temp=reqparse.RequestParser()
 
 class GetEmailCode(Resource):
@@ -14,19 +15,16 @@ class GetEmailCode(Resource):
 		temp.add_argument('username',required=True,help="Username is Required")
 		args=temp.parse_args()
 		username = args['username']
-		code = generate_verification_code(4)
 		jsobj = JsonObject()
-		jsobj.put("ret_code",1)
-		print(type(username))
-		print(type(code))
-		while False != query_db(code):
+		jsobj.put("ret_code",error_code['succeed'])
+
+		code = generate_verification_code(4)
+		while False != query_db_if_exist(code):
 			code = generate_verification_code(4)
-		if True == add_db(username,code):
+		if False != query_db_if_user(username):
+			jsobj.put("ret_code",error_code['user_exist'])
+		elif False == add_db(username,code):
+			jsobj.put("ret_code",error_code['user_exist'])
+		else:
 			send_verify(username,code)
-			jsobj.put("ret_code",0)
-		# sms_dict = sms_verify.send_verification_code(username)
-		# if sms_dict['code'] == 200:
-			# if False != sms.add_db(username,sms_dict['obj']):
-				# jsobj.put("code",True)
-				# jsobj.put("verify",code)
 		return jsobj.getJson(),200

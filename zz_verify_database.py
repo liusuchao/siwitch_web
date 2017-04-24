@@ -22,7 +22,7 @@ def init_db():
 
 def drop_db():
     base.metadata.drop_all(engine)
-	
+
 def add_db(user,verify):
 	session_class = sessionmaker(bind=engine)
 	session = session_class()
@@ -38,38 +38,33 @@ def add_db(user,verify):
 		return False
 	finally:
 		session.close()
-	
 
-def query_db1(user,verify):
+def query_db_if_valid(user,verify):
 	now = datetime.now()
 	now_str=now.strftime("%Y-%m-%d %H:%M:%S")
 	toDate = datetime.strptime(now_str, "%Y-%m-%d %H:%M:%S")  -  timedelta(minutes=15)
-	print("------")
-	print(toDate)
-	print(type(toDate))
-	print("------")
 	session_class = sessionmaker(bind=engine)
 	session = session_class()
 	try:
 		my_user = session.query(Verify).filter(Verify.user  == user,Verify.verify  == verify,Verify.update  >= toDate).first()  # 查询
-		print("fdsfsadfdasfa")
-		print(my_user)
 		session.delete(my_user)
 		session.commit()
-		return True
+		return my_user
 	except:
 		return False
 	finally:
 		session.close()
-		
 
-def query_db(verify):
+def query_db_if_exist(verify):
 	session_class = sessionmaker(bind=engine)
 	session = session_class()
 	try:
 		my_user = session.query(Verify).filter(Verify.verify  == verify).first()
 		session.delete(my_user)
 		session.commit()
+		print("***")
+		print(my_user)
+		print("***")
 		return True
 	except:
 		return False

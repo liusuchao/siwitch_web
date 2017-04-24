@@ -1,6 +1,5 @@
 
 #coding:utf-8
-import user
 import tools
 from flask_restful import reqparse, Resource
 from json_object import JsonObject
