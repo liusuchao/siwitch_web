@@ -6,7 +6,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Table, Column, Integer, Numeric, String, ForeignKey, DateTime
 from datetime import datetime  
-from sqlalchemy.orm import sessionmaker,relation
+from sqlalchemy.orm import sessionmaker,relation,relationship
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer  
 
 engine = create_engine("mysql+pymysql://root:123456@127.0.0.1/liusuchao",encoding='utf-8',echo=True)
@@ -17,7 +17,7 @@ class User(base):
 	id = Column(Integer,primary_key=True,autoincrement=True)
 	user = Column(String(32),unique=True)
 	password = Column(String(64))
-	email = Column(String(64))	
+	email = Column(String(64))
 	created = Column(DateTime(),default=datetime.now)
 	updated = Column(DateTime(), default=datetime.now, onupdate=datetime.now)
 	def __repr__(self):
@@ -36,12 +36,13 @@ class User(base):
 class UserBindDev(base):
 	__tablename__ = 'user_bind_dev' 
 	id = Column(Integer,primary_key=True,autoincrement=True)
-	dev  = Column(String(64))
-	director = relation("1111", backref='user_bind_dev', lazy=False)
+	dev_id  = Column(String(64),unique=True)
 	created = Column(DateTime(),default=datetime.now)
 	updated = Column(DateTime(), default=datetime.now, onupdate=datetime.now)
+	dev_list = relationship("User", backref="llll")
+	user_id = Column(Integer, ForeignKey("user.id"))
 	def __repr__(self):
-		return "<User('%s','%s','%s')>" % (self.dev, self.created, self.updated)
+		return "<User('%s','%s','%s')>" % (self.dev_id, self.created, self.updated)
 
 def init_db():
 	base.metadata.create_all(engine)
@@ -49,7 +50,7 @@ def init_db():
 def drop_db():
 	base.metadata.drop_all(engine)
 
-def add_db(user,password,email=''):
+def add_user_db(user,password,email=''):
 	session_class = sessionmaker(bind=engine)
 	session = session_class()
 	info=User()
@@ -79,5 +80,34 @@ def query_db_if_user(user):
 		return False
 	finally:
 		session.close()
-		
-add_db("fsdafasdf","fsafasfsd")
+
+def add_dev_db(user,dev):
+	session_class = sessionmaker(bind=engine)
+	session = session_class()
+	try:
+		my_user = session.query(User).filter_by(user=user).first()
+		my_dev=UserBindDev()
+		my_dev.dev_id = dev
+		my_dev.dev_list =my_user
+		session.add(my_dev)
+		session.add(my_user)
+		session.commit()
+		return True
+	except:
+		return False
+	finally:
+		session.close()
+
+def get_dev_db(user):
+	session_class = sessionmaker(bind=engine)
+	session = session_class()
+	try:
+		my_user = session.query(User).filter_by(user=user).first()
+		return my_user.llll
+	except:
+		return False
+	finally:
+		session.close()
+
+
+

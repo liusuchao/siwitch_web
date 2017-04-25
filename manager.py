@@ -27,8 +27,20 @@ def drop():
 
 	
 @manager.command
-def add():
-	pass
+def add_user():
+	zz_user_database.add_user_db("liusuchao","12345678")
+	#pass
+
+@manager.command
+def add_dev():
+	zz_user_database.add_dev_db("liusuchao","009")
+	zz_user_database.add_dev_db("liusuchao","010")
+	# pass
+
+@manager.command
+def get_dev():
+	print(zz_user_database.get_dev_db("liusuchao"))
+	# pass
 
 @manager.command
 def query():
